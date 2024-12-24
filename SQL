@@ -1,0 +1,225 @@
+5 Types of Commands 
+
+DDL , DML , DCL , TCL and DQL 
+
+SI No 	Category 	Commands
+1.	DDL - Data Definition language 	CREATE , ALTER , DROP , TRUNCATE (deals with the structure of the table)
+2.	DML - Data Manipulation language	SELECT , INSERT , UPDATE , DELETE 
+3. 	DCL - Data Control language	GRANT , REVOKE
+4. 	TCL - Transfer Control language	COMMIT , ROLLBACK , SAVEPOINT
+5. 	DQL - Data Query language 	SELECT
+
+
+CREATE - Creates a new table / schema . 
+ALTER - To change the structure of the table by adding or deleting column or also used for changing datatype of column and name of column .
+DROP - To delete the entire table permanently .
+TRUNCATE -  To delete only the contents of the table , So we can use the table structure alone for future use .
+SELECT - To retrieve data based on the condition .
+INSERT - To insert values in the table .
+UPDATE - To modify the values in the table .
+DELETE - To delete rows based on the given condition  
+GRANT - Grants permission to the user 
+REVOKE - Revoke the permission to the user 
+COMMIT - Saves all changes permanently 
+SAVEPOINT - Marks a point within a transaction . Transaction -> Set Of SQL queries used combinely .
+ROLLBACK - If there's an issue in the transaction after savepoint you can rollback to the savepoint , without undoeing entire transaction  
+
+Basic Commands : SELECT , CREATE , DELETE , ALTER , UPDATE , DROP , TRUNCATE , INSERT INTO 
+
+To create a new database or schema 
+CREATE SCHEMA flower;
+
+To create a new table in this schema flower
+CREATE TABLE flower.FLOWERS (NAME VARCHAR(32) , COLOUR VARCHAR(32) , PRICE INT );
+
+To view the contents in the flower table 
+SELECT * FROM FLOWER.FLOWERS ;
+
+To remove the column name price in the table 
+ALTER TABLE FLOWER.FLOWERS DROP COLUMN PRICE ;
+
+To add the column name price in the table 
+ALTER TABLE FLOWER.FLOWERS ADD COLUMN PRICE VARCHAR(32);
+
+To replace  the column name to another name 
+ALTER TABLE FLOWER.FLOWERS CHANGE PRICE FLOWER_PRICE INT;
+
+To replace the column name datatype to another 
+ALTER TABLE FLOWER.FLOWERS CHANGE FLOWER_PRICE FLOWER_PRICE varchar(32);
+
+To insert  a single row in the table 
+INSERT INTO FLOWER.FLOWERS VALUES ("Roja" , "Red" , 30);
+
+To insert multiple rows in the table 
+INSERT INTO FLOWER.FLOWERS VALUES ("Roja" , "Red" , 30) , ("Jasmine" , "White" , 80), ("SunFlower" , "Yellow" , 120);
+
+Here we can directly use values instead of mentioning all the column if and only if , we are going to give values for all columns .
+
+To replace a value in the table 
+Note : Here many table contain same name as jasmine with same colour and price , So once you do update it reflects in all the rows which satisfy the condition 
+UPDATE FLOWER.FLOWERS set name = 'lily' where COLOUR = 'White' ;
+
+
+SAFE UPDATE MODE - will be auto enabled to prevent us from using where command without primary key .
+
+SET SQL_SAFE_UPDATES = 0 ; //disable
+SET SQL_SAFE_UPDATES = 1 ; //enable
+
+
+To delete the contents in the table 
+TRUNCATE FLOWER.FLOWERS;
+
+To delete the table itself 
+DROP table FLOWER.FLOWERS;
+
+To grant permission to some user 
+To first GRANT just creating an user ,
+
+CREATE USER 'john'@'%' IDENTIFIED BY 'johns_password';    
+
+Here @% means whatever may be the ip address .Then with root or admin you will have to GRANT access ,So provide GRANT privilege .
+
+GRANT SELECT ON flower.flowers TO 'john'@'%';
+FLUSH PRIVILEGES;
+
+To remove or revoke permission to a user 
+REVOKE SELECT ON flower.flowers FROM 'john'@'%';
+FLUSH PRIVILEGES;
+
+
+SQL Operations :
+
+SI No	Operation 	Explanation
+1	=	To get a value equal to a specific value
+2	!=	To get a value not equal to the specific value
+3	Like	To check for a specified pattern  - John , john , JOHN , JOhn
+		%j - j ending words
+		j% - j starting words 
+		%an% - the words which have an 
+		% - it returns a string of any length and also an empty string
+		_a%' - it returns words with second letter a 
+		___ - since we used 3 underscore it returns word with 3 letters 
+		j_ - it returns a word with j starting and next has only 1 character
+		_n - it returns word with ends with n and it has only 2 characters 
+4	Not Like	To check and exclude words with a specified pattern  - John , john , JOHN , JOhn
+5	IN	If it is present within a list WHERE name in ('Siddhu' , 'Rani');
+6	NOT IN	If it is not present within a list WHERE name not in ('Siddhu' , 'Rani');
+7	DISTINCT	To print only unique values 
+8	ORDER BY 	To sort a value either in ASC or DESC
+9	LIMIT	To return the number of records count
+10	OFFSET	To skip certain rows before printing a set of values 
+
+
+SQL Aggregate Functions :
+
+COUNT(*)            --- > count the no of rows based on group if no col name is specified
+COUNT(column) --- > count the no of rows if col name specified 
+MAX(col)              --- > count the largest val in specified grp in all rows 
+MIN(col)               --- > count the min val in specified grp in all rows 
+AVG(col)               --- > count the avg val in specified grp in all rows 
+SUM(col)              --- > count the sum val in specified grp in all rows
+
+Table Joints : 
+
+INNER JOIN , LEFT JOIN , RIGHT JOIN , OUTER JOIN , SELF JOIN , CROSS JOIN
+
+
+Students 
+1	Alice	22
+2	Bob	24
+3	Charlie	23
+
+Courses
+101	1	Math
+102	2	Science
+103	3	English
+104	4	History
+
+
+INNER JOIN 
+
+//Displays matching from both the tables 
+
+SELECT * FROM table_1
+INNER JOIN table_2
+ON table1_col = table2_col ;
+
+
+SELECT * FROM testingdemo.students INNER JOIN testingdemo.courses on students.id = courses.student_id ;
+
+1	Alice	22	101	1	Math
+2	Bob	24	102	2	Science
+3	Charlie	23	103	3	English
+
+
+LEFT JOIN 
+
+//Displays All records of left table and only matching records of right table .
+//Here table_1 is LEFT and table_2 is RIGHT 
+
+SELECT*FROM table_1 LEFT JOIN table_2
+WHERE table1_col = table2_col ;
+
+
+SELECT * FROM testingdemo.students LEFT JOIN testingdemo.courses on students.id = courses.student_id ;
+
+1	Alice	22	101	1	Math
+2	Bob	24	102	2	Science
+3	Charlie	23	103	3	English
+
+
+RIGHT JOIN 
+
+//Displays All records of right table and only matching records of left table .
+//Here table_1 is LEFT and table_2 is RIGHT 
+
+SELECT*FROM table_1 RIGHT JOIN table_2
+WHERE table1_col = table2_col ;
+
+
+SELECT * FROM testingdemo.students RIGHT JOIN testingdemo.courses on students.id = courses.student_id ;
+
+1	Alice	22	101	1	Math
+2	Bob	24	102	2	Science
+3	Charlie	23	103	3	English
+ 	 	 	104	4	History
+
+
+Table Constraints :
+
+Primary Key , Foreign Key , Unique , Not Null , Check , Default 
+
+Primary Key - Uniquely refers each row in a table .
+Foreign Key - Common Column between 2 Tables 
+Unique - Column which has unique rows 
+Not Null - Column cannot have a null value 
+Check -  To Check a specific Condition
+Default - Gives a default value whatever we mention after default keyword 
+ 
+
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    age INT CHECK (age >= 18),
+    dept_id INT,
+    hire_date DATE DEFAULT (current_date()),
+    FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);
+
+
+After this If I give the below insert command for date it will take the default value 
+
+INSERT INTO employees (employee_id, name, age, dept_id) VALUES
+(1, 'Alice', 30, 1),
+(2, 'Bob', 24, 2),
+(3, 'Charlie', 28, 3);
+
+
+1	Alice	30	1	24-12-2024
+2	Bob	24	2	24-12-2024
+3	Charlie	28	3	24-12-2024
+
+Index - Helps to create index to traverse , It improves speed of read operation for retrieving purpose , meantime reduces speed of write operation like INSERT , UPDATE .
+CREATE INDEX index_emp ON employees(name);
+
+View - Simplify Complex Queries and Enhance Security by providing virtual table .
